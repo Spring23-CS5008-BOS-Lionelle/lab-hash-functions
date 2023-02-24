@@ -6,8 +6,11 @@
 #define ALGO_SIZE 4
 #define MAX_MOVIES 5
 
-static int collisions[ALGO_SIZE];
+int collisions[ALGO_SIZE];
 
+/** this is a way that we can
+ * cycle through the algorithms.
+*/
 uint32_t (*hash[])(const char*) = {
     simple_hash,
     djb2,
