@@ -7,24 +7,27 @@
 #define FNV_PRIME_32 16777619
 #define FNV_OFFSET_32 2166136261
 
+#define DJB2_PRIME 5381
+
+/**
+ * The simple hash, for reach character in key, sum the ascii values
+ * return that sum as the hash 
+*/
 uint32_t simple_hash(char *key) {
-    uint32_t hash = 0;
-    for (int i = 0; key[i] != '\0'; i++)
-    {
-        hash += key[i];
-    }
-    return hash;
-    //return 0;
+   
+
+    return 0;
 }
 
-
+/**
+ * start with prime number DJB2_PRIME as hash
+ * for every character in key, 
+ *     hash = hash * 33 + c  (hint, is there a faster way to implement the multiplication)
+ * return hash
+*/
 uint32_t djb2(char *key) {
-    uint32_t hash = 5381;
-    int c;
-    while ((c = *key++))
-        hash = ((hash << 5) + hash) + c;
-    return hash;
-//    return 0;
+    
+    return 0;
 }
 
 uint32_t fnv_hash(char *key)
