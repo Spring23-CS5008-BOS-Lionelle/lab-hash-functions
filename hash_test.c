@@ -5,10 +5,9 @@
 #include "hashing.h"
 
 #define ALGO_SIZE 4 /* make sure to change this if you add hash algos to hash[]*/
-#define MAX_MOVIES -1
 #define SIZE 2000000
 
-int collisions[ALGO_SIZE][SIZE];
+
 
 /** this is a way that we can
  * cycle through the algorithms.
@@ -33,57 +32,71 @@ void printCollisionsOnly(int *array, int size)
     int total = 0;
     int highest  = 0;
     int counter = 0;
+    int length = 0;
     int load = 0;
     for (int i = 0; i < size; i++) {
         if(array[i] > 1) { 
             total += array[i];
-            counter++;
+            length++;
             if(array[i] > highest) highest = array[i];
         }
         if(array[i] > 0) {
+            counter++;
             load++;
         }
     }
-    printf("Collisions: %d, Highest: %d, Average: %.2f, Load: %.5f\n", total, highest, 
-           total / (float)counter, load / (float)SIZE);
+    printf("Collisions: %d, Highest: %d, Average Length > 1: %.2f, Filled Spots: %d, Load: %.5f\n", total, highest, 
+           total / (float)length, counter, load / (float)SIZE);
 }
 
-int main() {
+int main(int argc, char** argv) {
 
-    char buffer[256];
-    FILE *fp;
-    fp = fopen("movie_ids_us.txt", "r");
-    if (fp == NULL)
+    int *collisions[ALGO_SIZE]; 
+    if (argc < 1)
     {
-        printf("Error opening file\n");
+        printf("Requires at least one file as an argument");
         return 1;
     }
 
-    int min_count = 0;
-
-    while (fgets(buffer, sizeof(buffer), fp))
-    {
-        int newline_pos = strcspn(buffer, "\n"); // Find position of newline character
-        if (newline_pos > 0 && buffer[newline_pos - 1] == '\r')
-        { // Check for carriage return on Windows
-            newline_pos--;
-        }
-        buffer[newline_pos] = '\0'; // Replace
-
+    char buffer[256];
+    FILE *fp;
+    
+    for(int filec = 1; filec < argc; filec++ ) {
+        
         for (int i = 0; i < ALGO_SIZE; i++)
         {
-            uint32_t loc = (hash[i](buffer)) % SIZE;
-            collisions[i][loc]++;
+            collisions[i] = (int*) malloc(sizeof(int)*SIZE);
+            memset(collisions[i], 0, SIZE); // quickly sets everything to 0
         }
-        if(MAX_MOVIES > 0 && min_count++ >= MAX_MOVIES) break;;
-    }
 
-    fclose(fp);
-    for(int i = 0; i < ALGO_SIZE; i++) {
-        if (SIZE > 200)
-            printCollisionsOnly(collisions[i], SIZE);
-        else printArray(collisions[i], SIZE);
-    }
+        fp = fopen(argv[filec], "r");
+        if (fp == NULL)
+        {
+            printf("Error opening file\n");
+            return 1;
+        }
 
+        printf("%s...\n", argv[filec]);
+        while (fgets(buffer, sizeof(buffer), fp))
+        {
+            for (int i = 0; i < ALGO_SIZE; i++)
+            {
+                uint32_t loc = (hash[i](buffer)) % SIZE;
+                collisions[i][loc]++;
+            }
+        }
+
+        fclose(fp);
+        for (int i = 0; i < ALGO_SIZE; i++)
+        {
+            if (SIZE > 200)
+                printCollisionsOnly(collisions[i], SIZE);
+            else
+                printArray(collisions[i], SIZE);
+        
+            free(collisions[i]); // free dynamically allocated arrays.
+        }
+        printf("\n"); // add extra space
+        }
     return 0;
 }
