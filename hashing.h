@@ -7,18 +7,27 @@
 #define FNV_PRIME_32 16777619
 #define FNV_OFFSET_32 2166136261
 
-uint32_t simple_hash(const char *key) {
-
-    return 0;
+uint32_t simple_hash(char *key) {
+    uint32_t hash = 0;
+    for (int i = 0; key[i] != '\0'; i++)
+    {
+        hash += key[i];
+    }
+    return hash;
+    //return 0;
 }
 
 
-uint32_t djb2(const char *key) {
-
-    return 0;
+uint32_t djb2(char *key) {
+    uint32_t hash = 5381;
+    int c;
+    while ((c = *key++))
+        hash = ((hash << 5) + hash) + c;
+    return hash;
+//    return 0;
 }
 
-uint32_t fnv_hash(const char *key)
+uint32_t fnv_hash(char *key)
 {
     uint32_t hash = FNV_OFFSET_32;
     int c;
@@ -30,7 +39,7 @@ uint32_t fnv_hash(const char *key)
     return hash;
 }
 
-uint32_t jenkins_one_at_a_time_hash(const char *key)
+uint32_t jenkins_one_at_a_time_hash(char *key)
 {
     uint32_t hash, c;
     hash = 0;
