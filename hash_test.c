@@ -30,12 +30,14 @@ void printCollisionsOnly(int *array, int size)
 {
     int total = 0;
     int highest  = 0;
+    int counter = 0;
     for (int i = 0; i < size; i++)
         if(array[i] > 1) { 
             total += array[i];
+            counter++;
             if(array[i] > highest) highest = array[i];
         }
-    printf("Collisions: %d, Highest: %d\n", total,highest);
+    printf("Collisions: %d, Highest: %d, Average: %.2f\n", total,highest, total / (float)counter);
 }
 
 int main() {
