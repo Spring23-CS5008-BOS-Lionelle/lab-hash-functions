@@ -52,7 +52,7 @@ int main() {
 
     char buffer[256];
     FILE *fp;
-    fp = fopen("movie_titles_us.txt", "r");
+    fp = fopen("movie_ids_us.txt", "r");
     if (fp == NULL)
     {
         printf("Error opening file\n");
