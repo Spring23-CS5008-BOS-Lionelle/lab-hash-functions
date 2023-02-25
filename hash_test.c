@@ -4,7 +4,7 @@
 
 #include "hashing.h"
 
-#define ALGO_SIZE 4
+#define ALGO_SIZE 4 /* make sure to change this if you add hash algos to hash[]*/
 #define MAX_MOVIES -1
 #define SIZE 2000000
 
@@ -17,7 +17,9 @@ uint32_t (*hash[])(char*) = {
     simple_hash,
     djb2,
     fnv_hash,
-    jenkins_one_at_a_time_hash};
+    jenkins_one_at_a_time_hash
+    
+    };
 
 
 void printArray(int * array, int size) {
@@ -31,20 +33,26 @@ void printCollisionsOnly(int *array, int size)
     int total = 0;
     int highest  = 0;
     int counter = 0;
-    for (int i = 0; i < size; i++)
+    int load = 0;
+    for (int i = 0; i < size; i++) {
         if(array[i] > 1) { 
             total += array[i];
             counter++;
             if(array[i] > highest) highest = array[i];
         }
-    printf("Collisions: %d, Highest: %d, Average: %.2f\n", total,highest, total / (float)counter);
+        if(array[i] > 0) {
+            load++;
+        }
+    }
+    printf("Collisions: %d, Highest: %d, Average: %.2f, Load: %.5f\n", total, highest, 
+           total / (float)counter, load / (float)SIZE);
 }
 
 int main() {
 
     char buffer[256];
     FILE *fp;
-    fp = fopen("movie_ids_us.txt", "r");
+    fp = fopen("movie_titles_us.txt", "r");
     if (fp == NULL)
     {
         printf("Error opening file\n");
