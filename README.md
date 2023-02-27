@@ -32,7 +32,7 @@ for (int i = 0; i < ALGO_SIZE; i++)
       collisions[i][loc]++;
 }
 ```
-This means that for every algorithm, call the hash, mode it by the `SIZE` of the 'hashmap' (really just an array in this case), and increment
+This means that for every algorithm, call the hash, mod it by the `SIZE` of the 'hashmap' (really just an array in this case), and increment
 a counter to track the number of collisions that happen. Since the `collisions[i]` is initialized with 0, it will just continue to count
 up for everything a key wants to be stored in that position. 
 
