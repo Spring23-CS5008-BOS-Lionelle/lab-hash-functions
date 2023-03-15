@@ -36,13 +36,13 @@ void printCollisionsOnly(int *array, int size)
     int load = 0;
     for (int i = 0; i < size; i++) {
         if(array[i] > 1) { 
-            total += array[i];
+            total += array[i]; // really looking at total chain length > 1
             length++;
             if(array[i] > highest) highest = array[i];
         }
         if(array[i] > 0) {
             counter++;
-            load++;
+            load += array[i]; // the n elements added to the table
         }
     }
     printf("Collisions: %d, Highest: %d, Average Length > 1: %.2f, Filled Spots: %d, Load: %.5f\n", total, highest, 
